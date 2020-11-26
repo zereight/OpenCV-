@@ -10,6 +10,8 @@ def registUser():
         )
 
         cam = cv2.VideoCapture(0)
+        cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
         user_id = input("\n 유저 ID를 입력해주세요. ==> ")
 
@@ -30,23 +32,26 @@ def registUser():
             faces = face_detector.detectMultiScale(
                 gray,
                 scaleFactor=1.3,  # 이미지 스케일
-                minNeighbors=1  # face 후보들의 개수
+                minNeighbors=10  # face 후보들의 개수
             )
+            cv2.imshow("IMG", img)
 
-            for (x, y, w, h) in faces:
+            for x, y, w, h in faces:
                 cv2.rectangle(
                     img, (x, y), (x+w, y+h), (0, 255, 0), 2
                 )
                 count += 1
                 print(F"사진 저장 중.. {count}/{save_img_num}")
-                cv2.imwrite(F"dataset/{user_id}/" + str(user_id))
+                cv2.imwrite(F"dataset/{user_id}/" +
+                            str(user_id)+F"_{count}"+".jpg", gray[y:y+h, x:x+w])
 
-            cv2.imshow("IMG", img)
-
-            if(count >= 30):
+            key = cv2.waitKey(50)
+            if key == ord('q'):
+                break
+            if(count >= save_img_num):
                 break
 
-        print("\n 사진 저장 완료")
+        # print("\n 사진 저장 완료")
         cam.release()
         cv2.destroyAllWindows()
         cv2.waitKey(1)
@@ -56,7 +61,6 @@ def registUser():
 
 if __name__ == "__main__":
     try:
-        # registUser()
-        pass
+        registUser()
     except Exception as e:
         print(e)

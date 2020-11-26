@@ -1,6 +1,8 @@
 import os
 import init
 import registerUser
+import trainer
+import detection
 
 data = dict()
 
@@ -20,4 +22,26 @@ if __name__ == "__main__":
     # 폴더가 있다면 데이터셋 동기화
     sync_dataset()
 
-    registerUser.registUser()
+    while(True):
+        try:
+            order = input("""
+명령할 동작을 입력해주세요.
+    1: 유저 등록
+    2: 감지
+    3: 초기화
+    0: 종료
+""")
+            if(order == "1"):
+                registerUser.registUser()
+            elif(order == "2"):
+                detection.detecting(trainer.Trainer())
+            elif(order == "3"):
+                init.allClear()
+                init.init()
+                print("초기화를 완료했습니다.\n")
+            elif(order == "0"):
+                break
+            else:
+                print("\n잘못입력하셨습니다.")
+        except Exception as e:
+            print(e)
