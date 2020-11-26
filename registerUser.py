@@ -50,13 +50,12 @@ def registUser():
                 break
             if(count >= save_img_num):
                 break
-
-        # print("\n 사진 저장 완료")
         cam.release()
-        cv2.destroyAllWindows()
-        cv2.waitKey(1)
     except Exception as e:
         print(e)
+
+    cv2.destroyAllWindows()
+    cv2.waitKey(1)
 
 
 if __name__ == "__main__":

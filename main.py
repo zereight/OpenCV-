@@ -29,16 +29,19 @@ if __name__ == "__main__":
     1: 유저 등록
     2: 감지
     3: 초기화
+    4: 학습
     0: 종료
 """)
             if(order == "1"):
                 registerUser.registUser()
             elif(order == "2"):
-                detection.detecting(trainer.Trainer())
+                detection.detecting(trainer.trainer())
             elif(order == "3"):
                 init.allClear()
                 init.init()
                 print("초기화를 완료했습니다.\n")
+            elif(order == "4"):
+                print(trainer.trainer())
             elif(order == "0"):
                 break
             else:
