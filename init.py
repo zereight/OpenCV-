@@ -12,9 +12,7 @@ def createFolder(directory):
 
 def init():
     createFolder("dataset")
-    createFolder("train_result")
 
 
 def allClear():
     shutil.rmtree("dataset")
-    shutil.rmtree("train_result")

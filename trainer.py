@@ -53,5 +53,4 @@ def trainer():
             continue
         models[name] = result
 
-    # 학습된 모델 딕셔너리 리턴
     return models

@@ -16,8 +16,6 @@ if __name__ == "__main__":
     # 필요한 폴더 없으면 생성
     if(not os.path.exists("dataset")):
         init.createFolder("dataset")
-    if(not os.path.exists("train_result")):
-        init.createFolder("train_result")
 
     # 폴더가 있다면 데이터셋 동기화
     sync_dataset()
@@ -29,7 +27,6 @@ if __name__ == "__main__":
     1: 유저 등록
     2: 감지
     3: 초기화
-    4: 학습
     0: 종료
 """)
             if(order == "1"):
@@ -40,8 +37,8 @@ if __name__ == "__main__":
                 init.allClear()
                 init.init()
                 print("초기화를 완료했습니다.\n")
-            elif(order == "4"):
-                print(trainer.trainer())
+            # elif(order == "4"):
+            #     print(trainer.trainer())
             elif(order == "0"):
                 break
             else:
