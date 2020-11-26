@@ -56,8 +56,8 @@ def detecting(models):
                 if confidence >= 87:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                else:  # 80% 이하 감지일때는 아직 잠금해제 안함
-                    cv2.putText(image, "", (250, 450),
+                else:  # 87% 이하 감지일때는 아직 잠금해제 안함
+                    cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
                 cv2.imshow('img', image)
 
@@ -71,6 +71,7 @@ def detecting(models):
             if key == ord('q'):
                 break
     except Exception as e:
-        print(e)
+        # print(e)
+        pass
     cam.release()
     cv2.destroyAllWindows()
