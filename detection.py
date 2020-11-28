@@ -1,5 +1,6 @@
 import cv2
 import os
+import requests
 
 
 def face_detecting(img, size=0.5):
@@ -54,6 +55,15 @@ def detecting(models):
                 if confidence >= 87:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
+                    cv2.imwrite(F"temp.jpg", face)
+                    files = open('temp.jpg', 'rb')
+                    upload = {
+                        'file': face
+                    }
+
+                    # res = requests.post(
+                    #     'http://localhost:10023/file', files=upload)
+
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
