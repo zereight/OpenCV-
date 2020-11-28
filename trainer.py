@@ -26,14 +26,14 @@ def train(name):
         Training_Data.append(np.asarray(images, dtype=np.uint8))
         Labels.append(i)
     if len(Labels) == 0:
-        print("학습 실패")
+        print("Fail to training")
         return None
     Labels = np.asarray(Labels, dtype=np.int32)
 
     model = cv2.face.LBPHFaceRecognizer_create()
 
     model.train(np.asarray(Training_Data), np.asarray(Labels))
-    print(name + " => 학습성공!")
+    print(name + " => Training completed!")
 
     return model
 

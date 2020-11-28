@@ -13,15 +13,15 @@ def registUser():
         cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-        user_id = input("\n 유저 ID를 입력해주세요. ==> ")
+        user_id = input("\n user id ==> ")
 
         if(os.path.exists(F"dataset/{user_id}")):
-            print("이미 등록된 ID입니다. 다시 입력해주세요.")
-            user_id = input('\n 유저 ID를 입력해주세요. ==>  ')
+            print("Already registeted.")
+            user_id = input('\n user id ==>  ')
 
         init.createFolder(F"dataset/{user_id}")
 
-        print("\n 얼굴 사진을 저장중입니다... 카메라를 응시해 주세요.")
+        print("\n Plz see the camera...")
 
         count = 0
         save_img_num = 30  # 저장할 사진 갯수
@@ -42,7 +42,7 @@ def registUser():
                     img, (x, y), (x+w, y+h), (0, 255, 0), 2
                 )
                 count += 1
-                print(F"사진 저장 중.. {count}/{save_img_num}")
+                print(F"save images.. {count}/{save_img_num}")
                 cv2.imwrite(F"dataset/{user_id}/" +
                             str(user_id)+F"_{count}"+".jpg", gray[y:y+h, x:x+w])
 
