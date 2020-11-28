@@ -3,7 +3,6 @@ import init
 import registerUser
 import trainer
 import detection
-import test
 
 
 if __name__ == "__main__":
@@ -34,6 +33,6 @@ if __name__ == "__main__":
             # elif(order == "5"):
             #     test.detecting(trainer.trainer())
             else:
-                print("\n잘못입력하셨습니다.")
+                print("\n Wrong input")
         except Exception as e:
             print(e)
