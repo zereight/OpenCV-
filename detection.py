@@ -1,5 +1,6 @@
 import cv2
 import os
+import requests
 
 
 def face_detecting(img, size=0.5):
@@ -52,11 +53,18 @@ def detecting(models):
                 cv2.putText(image, display_string, (100, 120),
                             cv2.FONT_HERSHEY_COMPLEX, 1, (250, 120, 255), 2)
 
-                # 87% 이상이면 감지성공(테스트 결과 87에서 잘걸러내는듯 ㅎ)
-                if confidence >= 87:
+                # 86% 이상이면 감지성공(테스트 결과 86에서 잘걸러내는듯 ㅎ)
+                if confidence >= 86:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                else:  # 87% 이하 감지일때는 아직 잠금해제 안함
+                    # 데이터 전송
+                    # upload = {
+                    #     "file": face
+                    # }
+                    # res = requests.post(
+                    #     'http://localhost:10023/file', files=upload)
+                    # print(res)
+                else:  # 86% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
                 cv2.imshow('img', image)
