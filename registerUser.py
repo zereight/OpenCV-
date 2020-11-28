@@ -28,7 +28,7 @@ def registUser():
 
         while(True):
             ret, img = cam.read()
-            img = cv2.flip(img, -1)  # 라즈베리파이아니면 제거 (영상 뒤집는것임)
+
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             faces = face_detector.detectMultiScale(
                 gray,

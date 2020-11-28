@@ -27,7 +27,7 @@ def detecting(models):
         while True:
 
             ret, frame = cam.read()
-            frame = cv2.flip(frame, -1)  # 라즈베리파이아니면 제거 (영상 뒤집는것임)
+
             image, face = face_detecting(frame)
 
             try:
