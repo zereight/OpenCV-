@@ -4,8 +4,6 @@ import os
 from os import listdir
 from os.path import isdir, isfile, join
 
-# 얼굴 인식용 haar/cascade 로딩
-face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 # 사용자 얼굴 학습
 
