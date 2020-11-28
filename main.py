@@ -23,11 +23,10 @@ if __name__ == "__main__":
     while(True):
         try:
             order = input("""
-명령할 동작을 입력해주세요.
-    1: 유저 등록
-    2: 감지
-    3: 초기화
-    0: 종료
+    1: regist user
+    2: detection
+    3: initialize
+    0: exit
 """)
             if(order == "1"):
                 registerUser.registUser()
