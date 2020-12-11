@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import timeit
 import gc
 import numpy as np
+import time
 
 headers = {'content-type': 'application/json'}
 
@@ -71,21 +72,23 @@ def detecting(models):
                     upload = {
                         'file': files
                     }
+
                     data = OrderedDict()
                     data['user_id']= min_score_name
                     data['datatime']= str(datetimeNow)
-                
-                    print(json.dumps(data))
+                    
                     res = requests.post(
                         'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
                     print("data request")
+                    time.sleep(1)
+
                     os.remove(F'{datetimeNow}findFace.jpg')
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
                     datetimeNow = str(datetime.now())
-                    print(datetimeNow)
+            
                     cv2.imwrite(F"{datetimeNow}uknown.jpg", face)
                     files = open(F'{datetimeNow}uknown.jpg', 'rb')
                     
@@ -95,18 +98,20 @@ def detecting(models):
                     data = OrderedDict()
                     data['user_id']= 'unknown'
                     data['datatime']= str(datetimeNow)
-                    print(json.dumps(data))
+
                     res = requests.post(
                         'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
                     print("error request")
+                    time.sleep(1)
 
                     os.remove(F'{datetimeNow}uknown.jpg')
-                    
+
                 cv2.imshow('img', image)
 
             except Exception as e:
                 # 얼굴 검출 안됨
-                print(e)
+                if("OpenCV" not in str(e)):
+                    print(e)
                 cv2.putText(image, "Face detecting...", (250, 450),
                             cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
 
@@ -117,7 +122,8 @@ def detecting(models):
                 break
         cam.release()
     except Exception as e:
-        print(e)
+        if("OpenCV" not in str(e)):
+            print(e)
         # pass
     cv2.destroyAllWindows()
     cv2.waitKey(1)
