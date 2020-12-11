@@ -66,7 +66,7 @@ def detecting(models):
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
                     datetimeNow = str(datetime.now())
-                    fileName = F"{datetimeNow}findFace.jpg"
+                    fileName = F"{datetimeNow}{min_score_name}.jpg"
                     cv2.imwrite(fileName, face)
                     files = open(fileName, 'rb')
                     upload = {
