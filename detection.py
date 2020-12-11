@@ -4,7 +4,9 @@ import requests
 
 
 def face_detecting(img, size=0.5):
-    face_detector = cv2.CascadeClassifier("haarcascade_frontface.xml")
+    face_detector = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_detector.detectMultiScale(gray, 1.3, 10)
     if faces is ():
