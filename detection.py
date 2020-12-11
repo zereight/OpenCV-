@@ -86,7 +86,7 @@ def detecting(models):
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
                     datetimeNow = str(datetime.now())
-                    fileName = F"{datetimeNow}uknown.jpg"
+                    fileName = F"{datetimeNow}unknown.jpg"
                     cv2.imwrite(fileName, face)
                     files = open(fileName, 'rb')
                     
