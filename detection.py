@@ -67,12 +67,21 @@ def detecting(models):
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
+                    #                 cv2.imwrite(F"temp.jpg", face)
+#                     files = open('temp.jpg', 'rb')
+#                     upload = {
+#                         'file': face
+#                 }
+
+                # res = requests.post(
+                #     'http://localhost:10023/file', files=upload)
                 cv2.imshow('img', image)
 
             except:
                 # 얼굴 검출 안됨
                 cv2.putText(image, "Face detecting...", (250, 450),
                             cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
+
                 cv2.imshow('img', image)
             # cv2.imshow('img', image)
             key = cv2.waitKey(50)
