@@ -75,7 +75,7 @@ def detecting(models):
                     data = OrderedDict()
                     data['user_id']= min_score_name
                     data['datatime']= str(datetimeNow)
-                    
+                
                     print(json.dumps(data))
                     res = requests.post(
                         'http://192.168.0.106:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
@@ -93,7 +93,7 @@ def detecting(models):
                         'file': files
                     }
                     data = OrderedDict()
-                    data['user_id']= unknown
+                    data['user_id']= 'unknown'
                     data['datatime']= str(datetimeNow)
                     print(json.dumps(data))
                     res = requests.post(
