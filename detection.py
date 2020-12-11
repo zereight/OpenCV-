@@ -69,14 +69,15 @@ def detecting(models):
                 if confidence >= 80:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                    cv2.imwrite(F"{datetime.now()}findFace.jpg", face)
-                    files = open(F'{datetime.now()}findFace.jpg', 'rb')
+                    datatimeNow = datetime.now()
+                    cv2.imwrite(F"{datatimeNow}findFace.jpg", face)
+                    files = open(F'{datatimeNow}findFace.jpg', 'rb')
                     upload = {
                         'file': face
                     }
                     data = {
                         'user_id': min_score_name,
-                        'datatime': datatime.now()
+                        'datatime': datatimeNow
                     }
 
                     res = requests.post(
@@ -85,11 +86,12 @@ def detecting(models):
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                    cv2.imwrite(F"{datetime.now()}uknown.jpg", face)
-                    files = open(F'{datetime.now()}uknown.jpg', 'rb')
+                    datatimeNow = datatime.now()
+                    cv2.imwrite(F"{datatimeNow}uknown.jpg", face)
+                    files = open(F'{datatimeNow}uknown.jpg', 'rb')
                     upload = {
                         'file': files,
-                        'datatime': datatime.now()
+                        'datatime': datatimeNow
                     }
                     data = {'user_id': 'unknown'}
 
