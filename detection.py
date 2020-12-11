@@ -6,12 +6,7 @@ from collections import OrderedDict
 from datetime import datetime, timedelta
 import timeit
 import gc
-
-file_data = OrderedDict()
-file_data['time'] = "2020-11-28-11-16"
-file_data['temperature'] = [1, 18]
-file_data['humidity'] = [1, 34]
-file_data['gas'] = [1, 20]
+import numpy as np
 
 headers = {'content-type': 'application/json'}
 
@@ -20,9 +15,9 @@ def face_detecting(img, size=0.5):
     face_detector = cv2.CascadeClassifier(
         cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
     )
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(cv2.UMat(img), cv2.COLOR_BGR2GRAY)
     faces = face_detector.detectMultiScale(gray, 1.3, 10)
-    if faces is ():
+    if faces == ():
         return img, []
     for(x, y, w, h) in faces:
         cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 255), 2)
@@ -47,7 +42,7 @@ def detecting(models):
                 min_score = 999  # 가장 낮은 점수로 예측된 사람의 점수
                 min_score_name = ""  # 가장 높은 점수로 예측된 사람의 이름
 
-                face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+                face = cv2.cvtColor(np.float32(face), cv2.COLOR_BGR2GRAY)
 
                 for key, model in models.items():
                     result = model.predict(face)
@@ -70,41 +65,46 @@ def detecting(models):
                 if confidence >= 80:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                    datetimeNow = datetime.now()
+                    datetimeNow = str(datetime.now())
                     cv2.imwrite(F"{datetimeNow}findFace.jpg", face)
                     files = open(F'{datetimeNow}findFace.jpg', 'rb')
+                    os.remove(F'{datetimeNow}findFace.jpg')
                     upload = {
                         'file': files
                     }
-                    data = {
-                        'user_id': min_score_name,
-                        'datatime': datetimeNow
-                    }
-
+                    data = OrderedDict()
+                    data['user_id']= min_score_name
+                    data['datatime']= str(datetimeNow)
+                    
+                    print(json.dumps(data))
                     res = requests.post(
-                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
+                        'http://192.168.0.106:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
+                    print("data request")
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                    datetimeNow = datetime.now()
+                    datetimeNow = str(datetime.now())
+                    print(datetimeNow)
                     cv2.imwrite(F"{datetimeNow}uknown.jpg", face)
                     files = open(F'{datetimeNow}uknown.jpg', 'rb')
+                    os.remove(F'{datetimeNow}uknown.jpg')
                     upload = {
                         'file': files
                     }
-                    data = {'user_id': 'unknown',
-                            'datatime': datetimeNow}
-
+                    data = OrderedDict()
+                    data['user_id']= unknown
+                    data['datatime']= str(datetimeNow)
+                    print(json.dumps(data))
                     res = requests.post(
-                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
-
-                # res = requests.post(
-                #     'http://localhost:10023/file', files=upload)
+                        'http://192.168.0.106:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
+                    print("error request")
+                
                 cv2.imshow('img', image)
 
-            except:
+            except Exception as e:
                 # 얼굴 검출 안됨
+                print(e)
                 cv2.putText(image, "Face detecting...", (250, 450),
                             cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
 
