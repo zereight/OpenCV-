@@ -78,7 +78,7 @@ def detecting(models):
                 
                     print(json.dumps(data))
                     res = requests.post(
-                        'http://192.168.0.106:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
+                        'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
                     print("data request")
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
@@ -97,7 +97,7 @@ def detecting(models):
                     data['datatime']= str(datetimeNow)
                     print(json.dumps(data))
                     res = requests.post(
-                        'http://192.168.0.106:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
+                        'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
                     print("error request")
                 
                 cv2.imshow('img', image)
