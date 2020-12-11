@@ -9,12 +9,11 @@ import gc
 
 file_data = OrderedDict()
 file_data['time'] = "2020-11-28-11-16"
-file_data['temperature'] = [1, 18]
+file_data['temperature'] = [1,18]
 file_data['humidity'] = [1, 34]
 file_data['gas'] = [1, 20]
 
 headers = {'content-type': 'application/json'}
-
 
 def face_detecting(img, size=0.5):
     face_detector = cv2.CascadeClassifier(
@@ -78,7 +77,7 @@ def detecting(models):
                     data = {'user_id': min_score_name}
 
                     res = requests.post(
-                        'http://192.168.0.196:10023/file', files=upload, data=data, headers=headers)
+                        'http://192.168.0.196:10023/file', files=upload, data=data,headers=headers)
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
@@ -91,7 +90,7 @@ def detecting(models):
                     data = {'user_id': 'unknown'}
 
                     res = requests.post(
-                        'http://192.168.0.196:10023/file', files=upload, data=data, headers=headers)
+                        'http://192.168.0.196:10023/file', files=upload, data=data,headers=headers)
 
                 # res = requests.post(
                 #     'http://localhost:10023/file', files=upload)
