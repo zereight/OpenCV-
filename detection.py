@@ -9,11 +9,12 @@ import gc
 
 file_data = OrderedDict()
 file_data['time'] = "2020-11-28-11-16"
-file_data['temperature'] = [1,18]
+file_data['temperature'] = [1, 18]
 file_data['humidity'] = [1, 34]
 file_data['gas'] = [1, 20]
 
 headers = {'content-type': 'application/json'}
+
 
 def face_detecting(img, size=0.5):
     face_detector = cv2.CascadeClassifier(
@@ -69,34 +70,34 @@ def detecting(models):
                 if confidence >= 80:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                    datatimeNow = datetime.now()
-                    cv2.imwrite(F"{datatimeNow}findFace.jpg", face)
-                    files = open(F'{datatimeNow}findFace.jpg', 'rb')
+                    datetimeNow = datetime.now()
+                    cv2.imwrite(F"{datetimeNow}findFace.jpg", face)
+                    files = open(F'{datetimeNow}findFace.jpg', 'rb')
                     upload = {
-                        'file': face
+                        'file': files
                     }
                     data = {
                         'user_id': min_score_name,
-                        'datatime': datatimeNow
+                        'datatime': datetimeNow
                     }
 
                     res = requests.post(
-                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data),headers=headers)
+                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                    datatimeNow = datatime.now()
-                    cv2.imwrite(F"{datatimeNow}uknown.jpg", face)
-                    files = open(F'{datatimeNow}uknown.jpg', 'rb')
+                    datetimeNow = datetime.now()
+                    cv2.imwrite(F"{datetimeNow}uknown.jpg", face)
+                    files = open(F'{datetimeNow}uknown.jpg', 'rb')
                     upload = {
-                        'file': files,
-                        'datatime': datatimeNow
+                        'file': files
                     }
-                    data = {'user_id': 'unknown'}
+                    data = {'user_id': 'unknown',
+                            'datatime': datetimeNow}
 
                     res = requests.post(
-                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data),headers=headers)
+                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data), headers=headers)
 
                 # res = requests.post(
                 #     'http://localhost:10023/file', files=upload)
