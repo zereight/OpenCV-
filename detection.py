@@ -74,10 +74,13 @@ def detecting(models):
                     upload = {
                         'file': face
                     }
-                    data = {'user_id': min_score_name}
+                    data = {
+                        'user_id': min_score_name,
+                        'datatime': datatime.now()
+                    }
 
                     res = requests.post(
-                        'http://192.168.0.196:10023/file', files=upload, data=data,headers=headers)
+                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data),headers=headers)
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
@@ -85,12 +88,13 @@ def detecting(models):
                     cv2.imwrite(F"{datetime.now()}uknown.jpg", face)
                     files = open(F'{datetime.now()}uknown.jpg', 'rb')
                     upload = {
-                        'file': files
+                        'file': files,
+                        'datatime': datatime.now()
                     }
                     data = {'user_id': 'unknown'}
 
                     res = requests.post(
-                        'http://192.168.0.196:10023/file', files=upload, data=data,headers=headers)
+                        'http://192.168.0.196:10023/detectPerson', files=upload, data=json.dumps(data),headers=headers)
 
                 # res = requests.post(
                 #     'http://localhost:10023/file', files=upload)
