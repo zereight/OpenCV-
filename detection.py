@@ -1,7 +1,7 @@
 import cv2
 import os
 import requests
-
+import json
 
 def face_detecting(img, size=0.5):
     face_detector = cv2.CascadeClassifier(
@@ -54,26 +54,32 @@ def detecting(models):
                             cv2.FONT_HERSHEY_COMPLEX, 1, (250, 120, 255), 2)
 
                 # 87% 이상이면 감지성공(테스트 결과 87에서 잘걸러내는듯 ㅎ)
-                if confidence >= 87:
+                if confidence >= 80:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                    cv2.imwrite(F"temp.jpg", face)
-                    files = open('temp.jpg', 'rb')
+                    cv2.imwrite(F"findFace.jpg", face)
+                    files = open('findFace.jpg', 'rb')
                     upload = {
                         'file': face
                     }
+                    data = {'user_id': min_score_name}
 
-                    # res = requests.post(
-                    #     'http://localhost:10023/file', files=upload)
+                    res = requests.post(
+                        'http://192.168.0.196:10023/file', files=upload, data=data)
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                    #                 cv2.imwrite(F"temp.jpg", face)
-#                     files = open('temp.jpg', 'rb')
-#                     upload = {
-#                         'file': face
-#                 }
+                    cv2.imwrite(F"uknown.jpg", face)
+                    files = open('uknown.jpg', 'rb')
+                    upload = {
+                        'file': files
+                    }
+                    data = {'user_id': 'unknown'}
+
+                    res = requests.post(
+                        'http://192.168.0.196:10023/file', files=upload, data=data)
+                    
 
                 # res = requests.post(
                 #     'http://localhost:10023/file', files=upload)
