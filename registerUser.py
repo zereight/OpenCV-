@@ -5,7 +5,9 @@ import init
 
 def registUser():
     try:
-        face_detector = cv2.CascadeClassifier("haarcascade_frontface.xml")
+        face_detector = cv2.CascadeClassifier(
+            cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        )
 
         cam = cv2.VideoCapture(0)
         cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
