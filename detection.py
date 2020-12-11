@@ -68,7 +68,6 @@ def detecting(models):
                     datetimeNow = str(datetime.now())
                     cv2.imwrite(F"{datetimeNow}findFace.jpg", face)
                     files = open(F'{datetimeNow}findFace.jpg', 'rb')
-                    os.remove(F'{datetimeNow}findFace.jpg')
                     upload = {
                         'file': files
                     }
@@ -80,6 +79,7 @@ def detecting(models):
                     res = requests.post(
                         'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
                     print("data request")
+                    os.remove(F'{datetimeNow}findFace.jpg')
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
@@ -88,7 +88,7 @@ def detecting(models):
                     print(datetimeNow)
                     cv2.imwrite(F"{datetimeNow}uknown.jpg", face)
                     files = open(F'{datetimeNow}uknown.jpg', 'rb')
-                    os.remove(F'{datetimeNow}uknown.jpg')
+                    
                     upload = {
                         'file': files
                     }
@@ -99,7 +99,9 @@ def detecting(models):
                     res = requests.post(
                         'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
                     print("error request")
-                
+
+                    os.remove(F'{datetimeNow}uknown.jpg')
+                    
                 cv2.imshow('img', image)
 
             except Exception as e:
