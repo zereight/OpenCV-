@@ -8,10 +8,7 @@ import timeit
 import gc
 import numpy as np
 import time
-
-headers = {'content-type': 'application/json'}
-
-
+# headers = {'content-type': 'application/json'}
 def face_detecting(img, size=0.5):
     face_detector = cv2.CascadeClassifier(
         cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
@@ -29,6 +26,8 @@ def face_detecting(img, size=0.5):
 
 def detecting(models):
     try:
+        reqURL = 'http://192.168.0.106:10023/detectPerson'
+        pivotValue = 80 # 유사도 판단 기준값
 
         cam = cv2.VideoCapture(0)
         cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -62,13 +61,14 @@ def detecting(models):
                 cv2.putText(image, display_string, (100, 120),
                             cv2.FONT_HERSHEY_COMPLEX, 1, (250, 120, 255), 2)
 
-                # 87% 이상이면 감지성공(테스트 결과 87에서 잘걸러내는듯 ㅎ)
-                if confidence >= 80:
+                # 기준 이상이면 감지성공
+                if confidence >= pivotValue:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
                     datetimeNow = str(datetime.now())
-                    cv2.imwrite(F"{datetimeNow}findFace.jpg", face)
-                    files = open(F'{datetimeNow}findFace.jpg', 'rb')
+                    fileName = F"{datetimeNow}findFace.jpg"
+                    cv2.imwrite(fileName, face)
+                    files = open(fileName, 'rb')
                     upload = {
                         'file': files
                     }
@@ -77,20 +77,18 @@ def detecting(models):
                     data['user_id']= min_score_name
                     data['datatime']= str(datetimeNow)
                     
-                    res = requests.post(
-                        'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
+                    res = requests.post(reqURL, files=upload, data=data)
                     print("data request")
-                    time.sleep(1)
 
-                    os.remove(F'{datetimeNow}findFace.jpg')
+                    os.remove(fileName)
 
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
                     datetimeNow = str(datetime.now())
-            
-                    cv2.imwrite(F"{datetimeNow}uknown.jpg", face)
-                    files = open(F'{datetimeNow}uknown.jpg', 'rb')
+                    fileName = F"{datetimeNow}uknown.jpg"
+                    cv2.imwrite(fileName, face)
+                    files = open(fileName, 'rb')
                     
                     upload = {
                         'file': files
@@ -99,31 +97,32 @@ def detecting(models):
                     data['user_id']= 'unknown'
                     data['datatime']= str(datetimeNow)
 
-                    res = requests.post(
-                        'http://192.168.0.106:10023/detectPerson', files=upload, data=data)
+                    res = requests.post(reqURL, files=upload, data=data)
                     print("error request")
-                    time.sleep(1)
 
-                    os.remove(F'{datetimeNow}uknown.jpg')
+                    os.remove(fileName)
 
                 cv2.imshow('img', image)
+                time.sleep(1)
 
             except Exception as e:
                 # 얼굴 검출 안됨
                 if("OpenCV" not in str(e)):
                     print(e)
+                else:
+                    print('face not found')
                 cv2.putText(image, "Face detecting...", (250, 450),
                             cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
 
                 cv2.imshow('img', image)
-            # cv2.imshow('img', image)
+                time.sleep(1)
+            
             key = cv2.waitKey(50)
             if key == ord('q'):
                 break
         cam.release()
     except Exception as e:
-        if("OpenCV" not in str(e)):
-            print(e)
-        # pass
+        print(e)
+        
     cv2.destroyAllWindows()
     cv2.waitKey(1)
