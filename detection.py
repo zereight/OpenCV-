@@ -28,6 +28,7 @@ def detecting(models):
     try:
         reqURL = 'http://192.168.0.106:10023/detectPerson'
         pivotValue = 80 # 유사도 판단 기준값
+        timeInterval = 0.1
 
         cam = cv2.VideoCapture(0)
         cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -65,7 +66,7 @@ def detecting(models):
                 if confidence >= pivotValue:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                    datetimeNow = str(datetime.now())
+                    datetimeNow = datetime.now()
                     fileName = F"{datetimeNow}{min_score_name}.jpg"
                     cv2.imwrite(fileName, face)
                     files = open(fileName, 'rb')
@@ -75,7 +76,7 @@ def detecting(models):
 
                     data = OrderedDict()
                     data['user_id']= min_score_name
-                    data['datatime']= str(datetimeNow)
+                    data['datatime']= datetimeNow
                     
                     res = requests.post(reqURL, files=upload, data=data)
                     print("data request")
@@ -85,7 +86,7 @@ def detecting(models):
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                    datetimeNow = str(datetime.now())
+                    datetimeNow = datetime.now()
                     fileName = F"{datetimeNow}unknown.jpg"
                     cv2.imwrite(fileName, face)
                     files = open(fileName, 'rb')
@@ -95,15 +96,15 @@ def detecting(models):
                     }
                     data = OrderedDict()
                     data['user_id']= 'unknown'
-                    data['datatime']= str(datetimeNow)
+                    data['datatime']= datetimeNow
 
                     res = requests.post(reqURL, files=upload, data=data)
-                    print("error request")
+                    print("unknown request")
 
                     os.remove(fileName)
 
                 cv2.imshow('img', image)
-                time.sleep(1)
+                time.sleep(timeInterval)
 
             except Exception as e:
                 # 얼굴 검출 안됨
@@ -115,7 +116,7 @@ def detecting(models):
                             cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
 
                 cv2.imshow('img', image)
-                time.sleep(1)
+                time.sleep(timeInterval)
             
             key = cv2.waitKey(50)
             if key == ord('q'):
