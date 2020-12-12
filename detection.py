@@ -66,7 +66,7 @@ def detecting(models):
                 if confidence >= pivotValue:
                     cv2.putText(image, F"{min_score_name} is detected!",
                                 (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
-                    datetimeNow = datetime.now()
+                    datetimeNow = datetime.now().strftime("%Y-%m-%d %H:%M%S")
                     fileName = F"{datetimeNow}{min_score_name}.jpg"
                     cv2.imwrite(fileName, face)
                     files = open(fileName, 'rb')
@@ -86,7 +86,7 @@ def detecting(models):
                 else:  # 87% 이하 감지일때는 아직 잠금해제 안함
                     cv2.putText(image, "Unknown", (250, 450),
                                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
-                    datetimeNow = datetime.now()
+                    datetimeNow = datetime.now().strftime("%Y-%m-%d %H:%M%S")
                     fileName = F"{datetimeNow}unknown.jpg"
                     cv2.imwrite(fileName, face)
                     files = open(fileName, 'rb')
