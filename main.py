@@ -21,7 +21,11 @@ if __name__ == "__main__":
             if(order == "1"):
                 registerUser.registUser()
             elif(order == "2"):
-                detection.detecting(trainer.trainer())
+                train_models = trainer.trainer()
+                if(train_models == {}):
+                    print("Cannot found image files in dataset folder")
+                else:
+                    detection.detecting(train_models)
             elif(order == "3"):
                 init.allClear()
                 init.init()

@@ -108,6 +108,7 @@ def detecting(models):
 
             except Exception as e:
                 # 얼굴 검출 안됨
+                # print(e)
                 if("OpenCV" not in str(e)):
                     print(e)
                 else:
@@ -123,7 +124,7 @@ def detecting(models):
                 break
         cam.release()
     except Exception as e:
-        print(e)
+        print("error:" + e)
         
     cv2.destroyAllWindows()
     cv2.waitKey(1)

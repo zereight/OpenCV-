@@ -50,5 +50,5 @@ def trainer():
         if result is None:
             continue
         models[name] = result
-
+    
     return models
